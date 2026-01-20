@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -42,6 +42,10 @@ while True:
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
+    if ball.left <=0 or ball.right >= screen_width:
+        ball.center = (screen_width/2, screen_height/2)
+        ball_speed_y *= random.choice((1,-1))
+        ball_speed_x *= random.choice((1,-1))
     if player.top <= 0:
         player.top = 0 
     if player.bottom >= screen_height:
