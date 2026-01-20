@@ -15,10 +15,15 @@ opponent = pygame.Rect(10, screen_height/2 - 15, 10, 140)
 bg_color =pygame.Color('grey12')
 light_grey = (200,200,200)
 
-ball_speed_x = 7
-ball_speed_y = 7
+ball_speed_x = 7 * random.choice((1,-1))
+ball_speed_y = 7 * random.choice((1,-1))
 player_speed = 0
 opponent_speed = 7
+
+player_score = 0
+opponent_score = 0
+game_font = pygame.font.SysFont(None, 32)
+timer = 3
 
 while True:
     for event in pygame.event.get():
@@ -42,7 +47,13 @@ while True:
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
-    if ball.left <=0 or ball.right >= screen_width:
+    if ball.left <=0:
+        player_score += 1
+        ball.center = (screen_width/2, screen_height/2)
+        ball_speed_y *= random.choice((1,-1))
+        ball_speed_x *= random.choice((1,-1))
+    if ball.right >= screen_width:
+        opponent_score += 1
         ball.center = (screen_width/2, screen_height/2)
         ball_speed_y *= random.choice((1,-1))
         ball_speed_x *= random.choice((1,-1))
@@ -60,11 +71,16 @@ while True:
         opponent.top += opponent_speed
     if opponent.bottom > ball.y + 50:
         opponent.bottom -= opponent_speed
+  
     screen.fill(bg_color)
     pygame.draw.rect(screen,light_grey, player)
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,0), (screen_width/2,screen_height)) 
 
+    player_text = game_font.render(f"{player_score}", False, light_grey)
+    screen.blit(player_text, (660, 470))
+    opponent_text = game_font.render(f"{opponent_score}", False, light_grey)
+    screen.blit(opponent_text, (610, 470))
     pygame.display.flip()
     clock.tick(60)
