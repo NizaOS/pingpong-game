@@ -10,16 +10,14 @@ def ball_animation():
         ball_speed_y *= -1
 
     if ball.left <=0:
-        time = pygame.time.get_ticks()
         player_score += 1
         score_time = pygame.time.get_ticks()
-        ball_restart()
+
         
     if ball.right >= screen_width:
-        time = pygame.time.get_ticks() 
         opponent_score += 1
         score_time = pygame.time.get_ticks()
-        ball_restart()
+
 
     if ball.colliderect(player) or ball.colliderect(opponent):
         ball_speed_x *= -1   
@@ -42,7 +40,21 @@ def oppononet_ai():
         opponent.bottom = screen_height
     
 def ball_restart():
+    global ball_speed_x, ball_speed_y, score_time
+
     ball.center = (screen_width/2, screen_height/2)
+    current_time = pygame.time.get_ticks()
+
+    
+   
+
+    if current_time - score_time < 2100:
+        ball_speed_x, ball_speed_y = 0,0
+    else:
+        ball_speed_y = 7 * random.choice((1,-1))
+        ball_speed_x = 7 * random.choice((1,-1))
+        score_time = None
+    
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -66,7 +78,7 @@ opponent_speed = 7
 player_score = 0
 opponent_score = 0
 game_font = pygame.font.SysFont(None, 32)
-time = None
+score_time = None
 
 while True:
     for event in pygame.event.get():
@@ -93,16 +105,9 @@ while True:
     
    
    
-    if time:
-        ball.center = (screen_width/2, screen_height/2)
+    if score_time:
+        ball_restart()
         
-        current_time = pygame.time.get_ticks()
-        if current_time - time < 2100:
-            ball_speed_x, ball_speed_y = 0,0
-        else:
-            ball_speed_y *= random.choice((1,-1))
-            ball_speed_x *= random.choice((1,-1))
-            time = None
             
 
   
