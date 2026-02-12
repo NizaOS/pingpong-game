@@ -63,6 +63,8 @@ screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('pingpong')
 
+background = pygame.image.load('/Users/MyPC/Downloads/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330_175/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330.jpg')
+
 ball = pygame.Rect(screen_width/2 - 15, screen_height/2 - 15, 30, 30)
 player = pygame.Rect(screen_width - 20, screen_height/2 - 15, 10, 140)
 opponent = pygame.Rect(10, screen_height/2 - 15, 10, 140)
@@ -77,7 +79,8 @@ opponent_speed = 7
 
 player_score = 0
 opponent_score = 0
-game_font = pygame.font.SysFont(None, 32)
+score_font = pygame.font.Font('freesansbold.ttf', 32)
+timer_font = pygame.font.SysFont(None, 64)
 score_time = None
 
 while True:
@@ -96,30 +99,23 @@ while True:
             if event.key == pygame.K_UP:
                 player_speed +=7
 
-    
-    
-    
     ball_animation()
     player_animation()
     oppononet_ai()
     
-   
-   
     if score_time:
         ball_restart()
-        
-            
-
-  
+          
     screen.fill(bg_color)
+    screen.blit(background, (0,0))
     pygame.draw.rect(screen,light_grey, player)
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,0), (screen_width/2,screen_height)) 
 
-    player_text = game_font.render(f"{player_score}", False, light_grey)
+    player_text = score_font.render(f"{player_score}", False, light_grey)
     screen.blit(player_text, (660, 470))
-    opponent_text = game_font.render(f"{opponent_score}", False, light_grey)
+    opponent_text = score_font.render(f"{opponent_score}", False, light_grey)
     screen.blit(opponent_text, (610, 470))
     pygame.display.flip()
     clock.tick(60)
