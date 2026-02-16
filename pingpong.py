@@ -63,11 +63,14 @@ screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('pingpong')
 
+iceblock = pygame.image.load("/Users/MyPC/brick.png").convert_alpha()
+iceblock_ld = pygame.transform.scale(iceblock, (15, 210))
+
 background = pygame.image.load('/Users/MyPC/Downloads/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330_175/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330.jpg')
 
 ball = pygame.Rect(screen_width/2 - 15, screen_height/2 - 15, 30, 30)
-player = pygame.Rect(screen_width - 20, screen_height/2 - 15, 10, 140)
-opponent = pygame.Rect(10, screen_height/2 - 15, 10, 140)
+player = pygame.Rect(screen_width - 20, screen_height/2 - 105, 15, 210)
+opponent = pygame.Rect(10, screen_height/2 - 105, 15, 210)
 
 bg_color =pygame.Color('grey12')
 light_grey = (200,200,200)
@@ -108,8 +111,8 @@ while True:
           
     screen.fill(bg_color)
     screen.blit(background, (0,0))
-    pygame.draw.rect(screen,light_grey, player)
-    pygame.draw.rect(screen, light_grey, opponent)
+    screen.blit(iceblock_ld, player)
+    screen.blit(iceblock_ld, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,0), (screen_width/2,screen_height)) 
 
