@@ -30,10 +30,16 @@ def player_animation():
         player.bottom = screen_height
 
 def oppononet_ai():
-    if opponent.top < ball.y + 50:
-        opponent.top += opponent_speed
-    if opponent.bottom > ball.y + 50:
-        opponent.bottom -= opponent_speed
+    global opponent_speed
+
+    distance = opponent.centery - ball.centery
+    if abs(distance) > 20:
+        if distance > 0:
+            opponent.y -= opponent_speed
+        else:
+            opponent.y += opponent_speed
+  
+
     if opponent.top <= 0:
         opponent.top = 0
     if opponent.bottom >= screen_height:
@@ -45,16 +51,26 @@ def ball_restart():
     ball.center = (screen_width/2, screen_height/2)
     current_time = pygame.time.get_ticks()
 
-    
-   
+    elapsed_time = current_time - score_time
 
-    if current_time - score_time < 2100:
-        ball_speed_x, ball_speed_y = 0,0
+    if elapsed_time < 700:
+        number = "3"
+    elif 700 <= elapsed_time < 1400:
+        number = "2"
+    elif 1400 <= elapsed_time < 2100:
+        number = "1"
+    else:
+        number = None
+                    
+    if elapsed_time < 2100:
+        ball_speed_x, ball_speed_y = 0, 0
+        return number
     else:
         ball_speed_y = 7 * random.choice((1,-1))
         ball_speed_x = 7 * random.choice((1,-1))
         score_time = None
-    
+        return None
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -64,7 +80,8 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('pingpong')
 
 iceblock = pygame.image.load("/Users/MyPC/brick.png").convert_alpha()
-iceblock_ld = pygame.transform.scale(iceblock, (15, 210))
+iceblock_l = pygame.transform.scale(iceblock, (15, 210))
+iceblock_r = pygame.transform.flip(iceblock_l, True, False)
 
 background = pygame.image.load('/Users/MyPC/Downloads/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330_175/vecteezy_winter-snowfall-at-midnight-with-the-moon-and-stars-on-sky_16157330.jpg')
 
@@ -106,19 +123,24 @@ while True:
     player_animation()
     oppononet_ai()
     
-    if score_time:
-        ball_restart()
+   
           
     screen.fill(bg_color)
     screen.blit(background, (0,0))
-    screen.blit(iceblock_ld, player)
-    screen.blit(iceblock_ld, opponent)
+    if score_time:
+        timer_number = ball_restart()
+        if timer_number:
+            timer_surf = timer_font.render(timer_number, True, light_grey)
+            timer_rect = timer_surf.get_rect(center=(screen_width/2,  screen_height/2 -50))
+            screen.blit(timer_surf, timer_rect)
+    screen.blit(iceblock_l, player)
+    screen.blit(iceblock_r, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,0), (screen_width/2,screen_height)) 
 
     player_text = score_font.render(f"{player_score}", False, light_grey)
     screen.blit(player_text, (660, 470))
     opponent_text = score_font.render(f"{opponent_score}", False, light_grey)
-    screen.blit(opponent_text, (610, 470))
+    screen.blit(opponent_text, (605, 470))
     pygame.display.flip()
     clock.tick(60)
