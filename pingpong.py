@@ -2,9 +2,9 @@ import pygame, sys, random, os
 
 
 def load_asset(filename):
-    """Finds the path to an asset relative to this script's location."""
-    current_path = os.path.dirname(__file__)
-    return os.path.join(current_path, filename)
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, filename)
+    return os.path.join(os.path.abspath("."), filename)
 
 def ball_animation():
     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
